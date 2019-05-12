@@ -1,17 +1,33 @@
+import sys
 import datetime
+import pickle
 
 start_year = 2019
 start_day = 100
 
+lstatus_file = "./dataset/life_status.pickle"
+lceffort_file = "./dataset/life_efforts.pickle"
 
-if __name__ == "__main__":
-    aspects = ["Work-out",
-               "Research",
-               "Reading",
-               "Meditation",
-               "English learning",
-               "Social"]
 
+def save_data(life_status, life_cumu_efforts):
+    with open(lstatus_file, "wb") as sfile:
+        pickle.dump(life_status, sfile)
+
+    with open(lceffort_file, "wb") as cfile:
+        pickle.dump(life_cumu_efforts, cfile)
+
+        
+def load_data():
+    with open(lstatus_file, "rb") as sfile:
+        life_status = pickle.load(sfile)
+
+    with open(lceffort_file, "rb") as cfile:
+        life_cumu_efforts = pickle.load(cfile)
+
+    return life_status, life_cumu_efforts
+
+
+def init_data():
     life_status = {}
     life_status["Work-out"] = 50
     life_status["Research"] = 50
@@ -19,14 +35,6 @@ if __name__ == "__main__":
     life_status["Meditation"] = 50
     life_status["English learning"] = 50
     life_status["Social"] = 50
-
-    life_consume_rate = {}
-    life_consume_rate["Work-out"] = 5
-    life_consume_rate["Research"] = 5
-    life_consume_rate["Reading"] = 5
-    life_consume_rate["Meditation"] = 5
-    life_consume_rate["English learning"] = 5
-    life_consume_rate["Social"] = 5
 
     life_cumu_efforts = {}
     life_cumu_efforts["Work-out"] = 5
@@ -36,9 +44,33 @@ if __name__ == "__main__":
     life_cumu_efforts["English learning"] = 5
     life_cumu_efforts["Social"] = 5
 
+    return life_status, life_cumu_efforts
+
+
+if __name__ == "__main__":
+    life_status, life_cumu_efforts = load_data()
+    # print("life_status: {}".format(life_status))
+    # print("life_cumu_efforts: {}".format(life_cumu_efforts))    
+
+    aspects = ["Work-out",
+               "Research",
+               "Reading",
+               "Meditation",
+               "English learning",
+               "Social"]
+
+    life_consume_rate = {}
+    life_consume_rate["Work-out"] = 5
+    life_consume_rate["Research"] = 5
+    life_consume_rate["Reading"] = 5
+    life_consume_rate["Meditation"] = 5
+    life_consume_rate["English learning"] = 5
+    life_consume_rate["Social"] = 5
+
     cur_time = datetime.datetime.now()    
     cur_day = int(cur_time.strftime("%j"))
-    print("Today is {}".format(cur_day))
+    cur_year = cur_time.strftime("%Y")
+    print("Today is {}th day of {}".format(cur_day, cur_year))
 
     for asp in aspects:
         life_status[asp] -= life_consume_rate[asp] * (cur_day - start_day)
