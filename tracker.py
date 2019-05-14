@@ -1,3 +1,4 @@
+# TODO: only the life_cumu_efforts needs to be materialized.
 import sys
 import datetime
 import pickle
@@ -47,6 +48,11 @@ def init_data():
     return life_status, life_cumu_efforts
 
 
+def add_meditation(life_cumu_efforts, life_add_rate):
+    print("Increase the level of Meditation...")
+    life_cumu_efforts["Meditation"] += life_add_rate["Meditation"]
+
+
 if __name__ == "__main__":
     life_status, life_cumu_efforts = load_data()
     # print("life_status: {}".format(life_status))
@@ -67,6 +73,14 @@ if __name__ == "__main__":
     life_consume_rate["English learning"] = 5
     life_consume_rate["Social"] = 5
 
+    life_add_rate = {}
+    life_add_rate["Work-out"] = 5
+    life_add_rate["Research"] = 5
+    life_add_rate["Reading"] = 5
+    life_add_rate["Meditation"] = 5
+    life_add_rate["English learning"] = 5
+    life_add_rate["Social"] = 5    
+
     cur_time = datetime.datetime.now()    
     cur_day = int(cur_time.strftime("%j"))
     cur_year = cur_time.strftime("%Y")
@@ -84,3 +98,5 @@ if __name__ == "__main__":
         else:
             health_sig = '-'
         print("{}: {}".format(asp, health_sig * display_health))
+
+    add_meditation(life_cumu_efforts, life_add_rate)
